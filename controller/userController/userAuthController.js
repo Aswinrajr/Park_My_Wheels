@@ -36,9 +36,8 @@ const userSignUp = async (req, res) => {
 
 const userVerification = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const userData = await userModel.findOne({ userEmail:email });
-    console.log(email, password,userData)
+    const { mobile, password } = req.body;
+    const userData = await userModel.findOne({ userMobile:mobile });
 
     if (userData) {
       const isPasswordValid = await bcrypt.compare(password, userData.userPassword);
