@@ -18,7 +18,7 @@ const getUserDataHome = async (req, res) => {
     }
 
  
-    const userData = await userModel.findById({_id:id},{userPassword:0});
+    const userData = await userModel.findOne({uuid:id},{userPassword:0});
     console.log(userData)
 
 
@@ -65,7 +65,7 @@ const getUserData = async (req, res) => {
       });
     }
 
-    const userData = await userModel.findOne({ _id: id }, { userPassword: 0 });
+    const userData = await userModel.findOne({ uuid: id }, { userPassword: 0 });
 
     if (!userData) {
       return res.status(404).json({
@@ -94,13 +94,13 @@ const updateUserData = async (req, res) => {
   try {
     console.log("Updating user data", req.query, req.body);
 
-    const { id } = req.query; // User ID passed as a query parameter
+    const { id } = req.query; // User UUID passed as a query parameter
     const updates = req.body;
 
     if (!id) {
       return res.status(400).json({
         success: false,
-        message: "User ID is required in query parameters",
+        message: "User UUID is required in query parameters",
       });
     }
 
@@ -111,8 +111,9 @@ const updateUserData = async (req, res) => {
       });
     }
 
-    const updatedUser = await userModel.findByIdAndUpdate(
-      id,
+    // Find the user by UUID and update their information
+    const updatedUser = await userModel.findOneAndUpdate(
+      { uuid: id }, // Search by userUUID
       { $set: updates },
       { new: true, runValidators: true }
     );
@@ -145,6 +146,7 @@ const getUserVehicleData = async (req, res) => {
     console.log("Welcome to get all user vehicle data");
 
     const { id } = req.query; // User ID passed as a query parameter
+    console.log(id)
 
     if (!id) {
       return res.status(400).json({

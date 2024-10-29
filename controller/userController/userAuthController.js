@@ -54,7 +54,7 @@ const userVerification = async (req, res) => {
         const role = userData.role === "user" ? "user" : "admin";
         return res.status(200).json({
           message: "Login successful.",
-          id: userData._id,
+          id: userData.uuid,
           role: role,
         });
       } else {
