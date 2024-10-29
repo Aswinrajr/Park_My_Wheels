@@ -1,12 +1,19 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../../models/userModel");
 
+const { v4: uuidv4 } = require('uuid');
+
+const generateUserUUID = () => {
+  return uuidv4();
+};
+
 
 
 const userSignUp = async (req, res) => {
   try {
     console.log("Welcome to user sugnup",req.body)
     const { userName, userMobile,userEmail,userPassword} = req.body;
+    const uuid = generateUserUUID()
    
     const mobile = parseInt(userMobile);
 
@@ -15,6 +22,7 @@ const userSignUp = async (req, res) => {
       const hashedPassword = await bcrypt.hash(userPassword, 10);
       
       const userData = {
+        uuid,
         userName,
         userEmail,
         userMobile: mobile,
