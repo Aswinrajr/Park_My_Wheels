@@ -14,10 +14,12 @@ userRoute.get("/get-userdata",userProfileController.getUserData);
 userRoute.post("/update-userdata",userProfileController.updateUserData);
 
 
+//GET HOME DATA- IMAGE AND USERNAME
+userRoute.get("/home",userProfileController.getUserDataHome);
+
+
 //GET THE USER VEHICLE DATA
 userRoute.get("/get-vehicle",userProfileController.getUserVehicleData);
-
-
 
 //ADD VEHICLE
 userRoute.post("/add-vehicle",userProfileController.addNewVehicle);
