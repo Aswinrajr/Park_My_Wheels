@@ -7,7 +7,7 @@ const userController = require("../../controller/userController/userAuthControll
 const userProfileController = require("../../controller/userController/userProfileController");
 
 // Configure multer for file uploads
-const storage = multer.memoryStorage(); // Store images in memory; you can also use diskStorage for saving on the server
+const storage = multer.memoryStorage(); 
 const upload = multer({ storage: storage });
 
 // User authentication routes
@@ -16,7 +16,7 @@ userRoute.post("/login", userController.userVerification);
 
 // User profile routes
 userRoute.get("/get-userdata", userProfileController.getUserData);
-userRoute.post("/update-userdata", userProfileController.updateUserData);
+userRoute.post("/update-userdata", upload.fields([{ name: 'image', maxCount: 1 }]), userProfileController.updateUserData);
 
 // Home data route
 userRoute.get("/home", userProfileController.getUserDataHome);

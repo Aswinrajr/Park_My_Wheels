@@ -93,9 +93,9 @@ const getUserData = async (req, res) => {
 
 const updateUserData = async (req, res) => {
   try {
-    console.log("Updating user data", req.query, req.body);
+    console.log("Updating user data", req.query, req.body, req.files);
 
-    const { id } = req.query; // User UUID passed as a query parameter
+    const { id } = req.query;
     const updates = req.body;
 
     if (!id) {
@@ -112,9 +112,14 @@ const updateUserData = async (req, res) => {
       });
     }
 
-    // Find the user by UUID and update their information
+    if (req.files && req.files.image) {
+      const imageFile = req.files.image[0];
+      const uploadedImageUrl = await uploadImage(imageFile.buffer);
+      updates.imageUrl = uploadedImageUrl; // Add the uploaded image URL to updates
+    }
+
     const updatedUser = await userModel.findOneAndUpdate(
-      { uuid: id }, // Search by userUUID
+      { uuid: id },
       { $set: updates },
       { new: true, runValidators: true }
     );
@@ -182,12 +187,12 @@ const addNewVehicle = async (req, res) => {
     const { id } = req.query;
     const { category, type, make, model, color, vehicleNo } = req.body;
 
-    // Check if an image is provided
+
     if (!req.files || !req.files.image) {
       return res.status(400).json({ message: "No image provided" });
     }
 
-    // Since we're using memory storage, the image will be in req.files.image
+    
     const imageFile = req.files.image[0];
 
     // Upload the image to Cloudinary

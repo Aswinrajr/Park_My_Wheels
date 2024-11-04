@@ -14,15 +14,15 @@ const uploadImage = async (imageBuffer, folder) => {
       cloudinary.uploader.upload_stream(
         {
           folder: folder,
-          resource_type: 'auto', // Automatically detect resource type (image, video, etc.)
+          resource_type: 'auto', 
         },
         (error, result) => {
           if (error) {
             return reject(new Error("Cloudinary upload failed: " + error.message));
           }
-          resolve(result.secure_url); // Return the image URL
+          resolve(result.secure_url);
         }
-      ).end(imageBuffer); // Send the buffer to the upload stream
+      ).end(imageBuffer); 
     });
   };
 
