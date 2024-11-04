@@ -15,7 +15,7 @@ dbConnect();
 app.use(cookieParser()); 
 app.use(express.json());
 
-const allowedOrigins = [];
+const allowedOrigins = ["http://localhost:5173"];
 
 const corsOptions = {
   origin: function (origin, callback) {

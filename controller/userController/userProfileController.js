@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../../models/userModel");
 const vehicleModel = require("../../models/vehicleModel");
+const { uploadImage } = require("../../config/cloudinary");
 
 
 
@@ -175,16 +176,26 @@ const getUserVehicleData = async (req, res) => {
   }
 };
 
+
 const addNewVehicle = async (req, res) => {
   try {
-    console.log("Welcome to add vehicle");
+    const { id } = req.query;
+    const { category, type, make, model, color, vehicleNo } = req.body;
 
-    const { id } = req.query; // User ID passed as a query parameter
+    // Check if an image is provided
+    if (!req.files || !req.files.image) {
+      return res.status(400).json({ message: "No image provided" });
+    }
 
-    const { image, category, type, make, model, color, vehicleNo } = req.body;
+    // Since we're using memory storage, the image will be in req.files.image
+    const imageFile = req.files.image[0];
 
+    // Upload the image to Cloudinary
+    const imageUrl = await uploadImage(imageFile.buffer, "vehicles"); // Specify the folder
+
+    // Create a new vehicle document
     const newVehicle = new vehicleModel({
-      image,
+      image: imageUrl, // Save the image URL
       category,
       type,
       make,
@@ -208,6 +219,8 @@ const addNewVehicle = async (req, res) => {
     });
   }
 };
+
+
 
 module.exports = {
   getUserData,
