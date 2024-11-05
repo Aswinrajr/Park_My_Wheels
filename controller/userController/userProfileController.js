@@ -115,8 +115,12 @@ const updateUserData = async (req, res) => {
     if (req.files && req.files.image) {
       const imageFile = req.files.image[0];
       const uploadedImageUrl = await uploadImage(imageFile.buffer);
-      updates.imageUrl = uploadedImageUrl; // Add the uploaded image URL to updates
+      updates.image = uploadedImageUrl; // Add the uploaded image URL to updates
+      console.log("uploadedImageUrl",uploadedImageUrl)
+      console.log(" updates.imageUrl",updates.image)
     }
+    console.log("Updates",updates)
+
 
     const updatedUser = await userModel.findOneAndUpdate(
       { uuid: id },
