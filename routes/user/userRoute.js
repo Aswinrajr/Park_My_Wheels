@@ -27,5 +27,13 @@ userRoute.get("/get-vehicle", userProfileController.getUserVehicleData);
 // Add vehicle route with file upload
 userRoute.post("/add-vehicle", upload.fields([{ name: 'image' }]), userProfileController.addNewVehicle);
 
+//Booking the slot for parking
+userRoute.post("/book-parking-slot", userProfileController.bookParkingSlot);
+
+//Get vehicle data in car booking
+userRoute.get("/get-vehicle-slot", userProfileController.getUserVehicleData);
+
+
+
 // Export the router
 module.exports = userRoute;

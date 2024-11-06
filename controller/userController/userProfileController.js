@@ -1,10 +1,8 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../../models/userModel");
 const vehicleModel = require("../../models/vehicleModel");
+const ParkingBooking = require("../../models/parkingSchema")
 const { uploadImage } = require("../../config/cloudinary");
-
-
-
 
 const getUserDataHome = async (req, res) => {
   try {
@@ -18,19 +16,15 @@ const getUserDataHome = async (req, res) => {
       });
     }
 
- 
-    const userData = await userModel.findOne({uuid:id},{userPassword:0});
-    console.log(userData)
+    const userData = await userModel.findOne({ uuid: id }, { userPassword: 0 });
+    console.log(userData);
 
-
-   
     if (!userData) {
       return res.status(404).json({
         message: "User not found",
       });
     }
 
-   
     res.status(200).json({
       message: "User data retrieved successfully",
       user: userData,
@@ -43,15 +37,6 @@ const getUserDataHome = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
-
-
 
 const getUserData = async (req, res) => {
   try {
@@ -115,12 +100,11 @@ const updateUserData = async (req, res) => {
     if (req.files && req.files.image) {
       const imageFile = req.files.image[0];
       const uploadedImageUrl = await uploadImage(imageFile.buffer);
-      updates.image = uploadedImageUrl; // Add the uploaded image URL to updates
-      console.log("uploadedImageUrl",uploadedImageUrl)
-      console.log(" updates.imageUrl",updates.image)
+      updates.image = uploadedImageUrl;
+      console.log("uploadedImageUrl", uploadedImageUrl);
+      console.log(" updates.imageUrl", updates.image);
     }
-    console.log("Updates",updates)
-
+    console.log("Updates", updates);
 
     const updatedUser = await userModel.findOneAndUpdate(
       { uuid: id },
@@ -156,7 +140,7 @@ const getUserVehicleData = async (req, res) => {
     console.log("Welcome to get all user vehicle data");
 
     const { id } = req.query; // User ID passed as a query parameter
-    console.log(id)
+    console.log(id);
 
     if (!id) {
       return res.status(400).json({
@@ -185,26 +169,23 @@ const getUserVehicleData = async (req, res) => {
   }
 };
 
-
 const addNewVehicle = async (req, res) => {
   try {
     const { id } = req.query;
     const { category, type, make, model, color, vehicleNo } = req.body;
 
-
     if (!req.files || !req.files.image) {
       return res.status(400).json({ message: "No image provided" });
     }
 
-    
     const imageFile = req.files.image[0];
 
     // Upload the image to Cloudinary
-    const imageUrl = await uploadImage(imageFile.buffer, "vehicles"); // Specify the folder
+    const imageUrl = await uploadImage(imageFile.buffer, "vehicles"); 
 
-    // Create a new vehicle document
+
     const newVehicle = new vehicleModel({
-      image: imageUrl, // Save the image URL
+      image: imageUrl,
       category,
       type,
       make,
@@ -229,6 +210,49 @@ const addNewVehicle = async (req, res) => {
   }
 };
 
+const bookParkingSlot = async (req, res) => {
+  try {
+    console.log("Welcome to the booking vehicle");
+    const { id } = req.query;
+    const { place, vehicleNumber, bookingDate, time } = req.body;
+
+    if (!id || !place || !vehicleNumber || !bookingDate || !time) {
+     
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const newBooking = new ParkingBooking({
+      place,
+      vehicleNumber,
+      time,
+      bookingDate,
+      userId: id,
+    });
+
+    await newBooking.save();
+
+    res
+      .status(201)
+      .json({
+        message: "Parking slot booked successfully",
+        booking: newBooking,
+      });
+  } catch (err) {
+    console.error("Error in booking the slot:", err);
+    res.status(500).json({ message: "Error in booking the slot" });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = {
@@ -236,5 +260,6 @@ module.exports = {
   updateUserData,
   addNewVehicle,
   getUserVehicleData,
-  getUserDataHome
+  getUserDataHome,
+  bookParkingSlot,
 };
