@@ -98,10 +98,17 @@ const vendorSignup = async (req, res) => {
 
     const imageFile = req.file;
 
-    const uploadedImageUrl = await uploadImage(
-      imageFile.buffer,
-      "vendor_images"
-    );
+    let uploadedImageUrl 
+    
+    if(imageFile){
+        uploadedImageUrl  = await uploadImage(
+          imageFile.buffer,
+          "vendor_images"
+        );
+
+    }
+
+    
 
     if (
       !vendorName ||
@@ -129,7 +136,7 @@ const vendorSignup = async (req, res) => {
 
       address,
       password: hashedPassword,
-      image: uploadedImageUrl,
+      image: uploadedImageUrl||"",
     });
 
     await newVendor.save();
