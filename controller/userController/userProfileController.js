@@ -99,7 +99,8 @@ const updateUserData = async (req, res) => {
 
     if (req.files && req.files.image) {
       const imageFile = req.files.image[0];
-      const uploadedImageUrl = await uploadImage(imageFile.buffer);
+      // Upload image to the 'user_images' folder
+      const uploadedImageUrl = await uploadImage(imageFile.buffer, "user_images");
       updates.image = uploadedImageUrl;
       console.log("uploadedImageUrl", uploadedImageUrl);
       console.log(" updates.imageUrl", updates.image);
