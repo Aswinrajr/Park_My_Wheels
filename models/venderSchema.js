@@ -17,14 +17,14 @@ const vendorSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    location: {
-      lat: {
-        type: Number,
-      },
-      lng: {
-        type: Number,
-      },
+
+    latitude: {
+      type: String,
     },
+    longitude: {
+      type: String,
+    },
+
     address: {
       type: String,
       required: true,

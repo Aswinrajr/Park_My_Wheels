@@ -88,10 +88,12 @@ const vendorSignup = async (req, res) => {
       vendorName,
       contactPerson,
       contactNo,
-      location,
+      latitude,
+      longitude,
       address,
+      landmark,
       password,
-      confirmPassword,
+     
     } = req.body;
 
     const imageFile = req.file;
@@ -105,17 +107,15 @@ const vendorSignup = async (req, res) => {
       !vendorName ||
       !contactPerson ||
       !contactNo ||
-      !location ||
+     
       !address ||
-      !password ||
-      !confirmPassword
+      !password
+    
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
-    }
+ 
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -123,7 +123,10 @@ const vendorSignup = async (req, res) => {
       vendorName,
       contactPerson,
       contactNo,
-      location,
+      latitude,
+      longitude,
+      landmark,
+
       address,
       password: hashedPassword,
       image: uploadedImageUrl,
@@ -137,7 +140,9 @@ const vendorSignup = async (req, res) => {
         vendorName: newVendor.vendorName,
         contactPerson: newVendor.contactPerson,
         contactNo: newVendor.contactNo,
-        location: newVendor.location,
+        latitude: newVendor.latitude,
+        longitude:newVendor.longitude,
+        landmark:newVendor,landmark,
         address: newVendor.address,
         image: newVendor.image,
       },
