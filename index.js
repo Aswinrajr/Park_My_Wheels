@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const { PORT } = require("./config/variables.js");
 const dbConnect = require("./config/dbConnect.js");
 const userRoute = require("./routes/user/userRoute.js");
+const vendorRoute = require("./routes/vendor/vendorRoute.js")
 
 app.set("trust proxy", true);
 
@@ -34,6 +35,8 @@ app.use(cors(corsOptions));
 app.disable("x-powered-by");
 
 app.use("/", userRoute);
+app.use("/vendor", vendorRoute);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
