@@ -92,14 +92,13 @@ const vendorLogin = async (req, res) => {
        
         return res.status(200).json({
             message: "Login successful",
-            vendorDetails: {
-                vendorId: vendor._id,
-                vendorName: vendor.vendorName,
-                contactPerson: vendor.contactPerson,
-                contactNo: vendor.contactNo,
-                location: vendor.location,
-                address: vendor.address,
-            }
+            vendorId: vendor._id,
+            vendorName: vendor.vendorName,
+            contactPerson: vendor.contactPerson,
+            contactNo: vendor.contactNo,
+            latitude: vendor.location.lat,
+            longitude:vendor.location.lng,
+            address: vendor.address,
         });
     } catch (err) {
         console.error("Error in vendor login", err);
