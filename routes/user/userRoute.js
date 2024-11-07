@@ -10,6 +10,12 @@ const userProfileController = require("../../controller/userController/userProfi
 const storage = multer.memoryStorage(); 
 const upload = multer({ storage: storage });
 
+userRoute.post("/forgotpassword",userController.userForgotPassword)
+userRoute.post("/verify-otp",userController.verifyOTP)
+userRoute.post("/resend-otp",userController.userForgotPassword)
+
+
+
 // User authentication routes
 userRoute.post("/signup", userController.userSignUp);
 userRoute.post("/login", userController.userVerification);
