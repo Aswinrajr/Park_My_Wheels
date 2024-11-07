@@ -26,7 +26,7 @@ const vendorSignup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Save vendor details with image URL in the database
-        const newVendor = new Vendor({
+        const newVendor = new vendorModel({
             vendorName,
             contactPerson,
             contactNo,
