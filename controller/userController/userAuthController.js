@@ -144,15 +144,37 @@ const userVerification = async (req, res) => {
   }
 };
 
-const userChangePassword = async(req,res)=>{
-  try{
-    console.log("Welcome to user change password")
+const userChangePassword = async (req, res) => {
+  try {
+    console.log("Welcome to user change password");
+
+    const { contactNo, password, confirmPassword } = req.body;
+
+   
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
 
-  }catch(err){
-    console.log("Error in user change password",err)
+    const user = await userModel.findOneAndUpdate(
+      { userMobile:contactNo },
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Password updated successfully" });
+
+  } catch (err) {
+    console.log("Error in user change password", err);
+    res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 
 
