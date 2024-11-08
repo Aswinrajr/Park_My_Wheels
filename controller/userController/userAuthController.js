@@ -56,7 +56,7 @@ const verifyOTP = async (req, res) => {
     }
 
     if (req.app.locals.otp) {
-      if (otp === req.app.locals.otp) {
+      if (otp == req.app.locals.otp) {
         return res.status(200).json({
           message: "OTP verified successfully",
           success: true,
@@ -143,6 +143,21 @@ const userVerification = async (req, res) => {
     return res.status(500).json({ message: "Internal server error." });
   }
 };
+
+const userChangePassword = async(req,res)=>{
+  try{
+    console.log("Welcome to user change password")
+
+
+  }catch(err){
+    console.log("Error in user change password",err)
+  }
+}
+
+
+
+
+
 
 module.exports = {
   userSignUp,

@@ -13,6 +13,8 @@ const upload = multer({ storage: storage });
 userRoute.post("/forgotpassword",userController.userForgotPassword)
 userRoute.post("/verify-otp",userController.verifyOTP)
 userRoute.post("/resend-otp",userController.userForgotPassword)
+userRoute.post("/change-password",userController.userChangePassword)
+
 
 
 
