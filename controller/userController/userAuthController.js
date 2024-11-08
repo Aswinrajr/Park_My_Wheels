@@ -163,5 +163,6 @@ module.exports = {
   userSignUp,
   userVerification,
   userForgotPassword,
-  verifyOTP
+  verifyOTP,
+  userChangePassword
 };
