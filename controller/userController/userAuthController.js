@@ -101,6 +101,8 @@ const userSignUp = async (req, res) => {
         userEmail,
         userMobile: mobile,
         userPassword: hashedPassword,
+    
+
        
       };
 
