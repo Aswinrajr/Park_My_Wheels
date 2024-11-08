@@ -47,7 +47,7 @@ const verifyOTP = async (req, res) => {
     }
 
     if (req.app.locals.otp) {
-      if (otp === req.app.locals.otp) {
+      if (otp == req.app.locals.otp) {
         return res.status(200).json({
           message: "OTP verified successfully",
           success: true,
@@ -70,6 +70,38 @@ const verifyOTP = async (req, res) => {
   }
 };
 
+
+const userChangePassword = async (req, res) => {
+  try {
+    console.log("Welcome to user change password");
+
+    const { contactNo, password, confirmPassword } = req.body;
+
+   
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+
+    const vendor = await vendorModel.findOneAndUpdate(
+      { contactNo },
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    if (!vendor) {
+      return res.status(404).json({ message: "Vendor not found" });
+    }
+
+    res.status(200).json({ message: "Password updated successfully" });
+
+  } catch (err) {
+    console.log("Error in vendor change password", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 
 
