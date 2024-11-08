@@ -118,6 +118,8 @@ const vendorChangePassword = async (req, res) => {
 
 const vendorSignup = async (req, res) => {
   try {
+
+    console.log("req.body",req.body)
     const {
       vendorName,
       contactPerson,
