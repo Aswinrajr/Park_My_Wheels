@@ -47,12 +47,14 @@ const verifyOTP = async (req, res) => {
     }
 
     if (req.app.locals.otp) {
+      console.log(" req.app.locals")
       if (otp == req.app.locals.otp) {
         return res.status(200).json({
           message: "OTP verified successfully",
           success: true,
         });
       } else {
+        console.log("no req.app.locals")
         return res.status(400).json({
           message: "Invalid OTP",
           success: false,
@@ -71,7 +73,7 @@ const verifyOTP = async (req, res) => {
 };
 
 
-const userChangePassword = async (req, res) => {
+const vendorChangePassword = async (req, res) => {
   try {
     console.log("Welcome to user change password");
 
@@ -128,6 +130,12 @@ const vendorSignup = async (req, res) => {
      
     } = req.body;
 
+
+    const existUser = await vendorModel.findOne({contactNo})
+    if(existUser){
+      return res.status(400).json({ message: 'User with this contact number already exists.' });
+    } 
+
     const imageFile = req.file;
 
     let uploadedImageUrl 
@@ -154,6 +162,8 @@ const vendorSignup = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+
+
  
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -164,7 +174,7 @@ const vendorSignup = async (req, res) => {
       contactNo,
       latitude,
       longitude,
-      landmark,
+      landMark:landmark,
 
       address,
       password: hashedPassword,
@@ -181,7 +191,7 @@ const vendorSignup = async (req, res) => {
         contactNo: newVendor.contactNo,
         latitude: newVendor.latitude,
         longitude:newVendor.longitude,
-        landmark:newVendor,landmark,
+        landmark:newVendor.landMark,
         address: newVendor.address,
         image: newVendor.image,
       },
@@ -233,5 +243,6 @@ module.exports = {
   vendorLogin,
   vendorForgotPassword,
   verifyOTP,
+  vendorChangePassword
 
 };
