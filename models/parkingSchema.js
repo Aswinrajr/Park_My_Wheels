@@ -26,6 +26,9 @@ const parkingBookingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  vendorId:{
+    type:String
+  }
 });
 
 const ParkingBooking = mongoose.model("ParkingBooking", parkingBookingSchema);

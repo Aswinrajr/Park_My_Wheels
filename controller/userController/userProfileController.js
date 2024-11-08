@@ -3,6 +3,7 @@ const userModel = require("../../models/userModel");
 const vehicleModel = require("../../models/vehicleModel");
 const ParkingBooking = require("../../models/parkingSchema")
 const { uploadImage } = require("../../config/cloudinary");
+const venderSchema = require("../../models/venderSchema");
 
 const getUserDataHome = async (req, res) => {
   try {
@@ -211,16 +212,57 @@ const addNewVehicle = async (req, res) => {
   }
 };
 
+
+
+const getUserandVendorDetails = async (req, res) => {
+  try {
+    console.log("Welcome to get User and Vendor Details");
+
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Fetching vehicle data associated with the user ID
+    const vehicleData = await vehicleModel.find({ userId: id });
+    console.log("Vehicle Data:", vehicleData);
+
+   
+    const vendorData = await venderSchema.find({}, { password: 0 });
+    console.log("Vendor Data:", vendorData);
+
+   
+    res.status(200).json({
+      message: "User and vendor details fetched successfully",
+      data: {
+        vehicleData,
+        vendorData,
+      },
+    });
+  } catch (err) {
+    console.error("Error in get User and Vendor Details:", err);
+    res.status(500).json({ message: "Server error while fetching details", error: err.message });
+  }
+};
+
+
+
+
+
+
 const bookParkingSlot = async (req, res) => {
   try {
     console.log("Welcome to the booking vehicle");
     const { id } = req.query;
-    const { place, vehicleNumber, bookingDate, time } = req.body;
+    const { place, vehicleNumber, bookingDate, time,vendorId } = req.body;
 
     if (!id || !place || !vehicleNumber || !bookingDate || !time) {
      
       return res.status(400).json({ message: "All fields are required" });
     }
+
+
 
     const newBooking = new ParkingBooking({
       place,
@@ -228,6 +270,7 @@ const bookParkingSlot = async (req, res) => {
       time,
       bookingDate,
       userId: id,
+      vendorId
     });
 
     await newBooking.save();
@@ -256,6 +299,9 @@ const bookParkingSlot = async (req, res) => {
 
 
 
+
+
+
 module.exports = {
   getUserData,
   updateUserData,
@@ -263,4 +309,5 @@ module.exports = {
   getUserVehicleData,
   getUserDataHome,
   bookParkingSlot,
+  getUserandVendorDetails
 };

@@ -35,6 +35,10 @@ userRoute.get("/get-vehicle", userProfileController.getUserVehicleData);
 // Add vehicle route with file upload
 userRoute.post("/add-vehicle", upload.fields([{ name: 'image' }]), userProfileController.addNewVehicle);
 
+// Get the vendor and user details at the time of choose parking dropdown
+userRoute.get("/get-slot-details",userProfileController.getUserandVendorDetails)
+
+
 //Booking the slot for parking
 userRoute.post("/book-parking-slot", userProfileController.bookParkingSlot);
 

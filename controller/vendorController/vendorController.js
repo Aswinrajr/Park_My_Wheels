@@ -11,14 +11,13 @@ const vendorForgotPassword = async (req, res) => {
       return res.status(400).json({ message: "Mobile number is required" });
     }
 
-    const existVendor = await vendorModel.findOne({contactNo})
-
+    const existVendor = await vendorModel.findOne({ contactNo });
 
     if (!existVendor) {
-        return res.status(404).json({
-          message: "vendor not found with the provided contact number"
-        });
-      }
+      return res.status(404).json({
+        message: "vendor not found with the provided contact number",
+      });
+    }
 
     const otp = generateOTP();
     console.log("Generated OTP:", otp);
@@ -41,20 +40,18 @@ const verifyOTP = async (req, res) => {
     const { otp } = req.body;
 
     if (!otp) {
-      return res
-        .status(400)
-        .json({ message: "OTP is required" });
+      return res.status(400).json({ message: "OTP is required" });
     }
 
     if (req.app.locals.otp) {
-      console.log(" req.app.locals")
+      console.log(" req.app.locals");
       if (otp == req.app.locals.otp) {
         return res.status(200).json({
           message: "OTP verified successfully",
           success: true,
         });
       } else {
-        console.log("no req.app.locals")
+        console.log("no req.app.locals");
         return res.status(400).json({
           message: "Invalid OTP",
           success: false,
@@ -72,20 +69,17 @@ const verifyOTP = async (req, res) => {
   }
 };
 
-
 const vendorChangePassword = async (req, res) => {
   try {
     console.log("Welcome to user change password");
 
     const { contactNo, password, confirmPassword } = req.body;
 
-   
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
 
     const vendor = await vendorModel.findOneAndUpdate(
       { contactNo },
@@ -98,28 +92,15 @@ const vendorChangePassword = async (req, res) => {
     }
 
     res.status(200).json({ message: "Password updated successfully" });
-
   } catch (err) {
     console.log("Error in vendor change password", err);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
 const vendorSignup = async (req, res) => {
   try {
-
-    console.log("req.body",req.body)
+    console.log("req.body", req.body);
     const {
       vendorName,
       contactPerson,
@@ -129,44 +110,26 @@ const vendorSignup = async (req, res) => {
       address,
       landmark,
       password,
-     
     } = req.body;
 
-
-    const existUser = await vendorModel.findOne({contactNo})
-    if(existUser){
-      return res.status(400).json({ message: 'User with this contact number already exists.' });
-    } 
+    const existUser = await vendorModel.findOne({ contactNo });
+    if (existUser) {
+      return res
+        .status(400)
+        .json({ message: "User with this contact number already exists." });
+    }
 
     const imageFile = req.file;
 
-    let uploadedImageUrl 
-    
-    if(imageFile){
-        uploadedImageUrl  = await uploadImage(
-          imageFile.buffer,
-          "vendor_images"
-        );
+    let uploadedImageUrl;
 
+    if (imageFile) {
+      uploadedImageUrl = await uploadImage(imageFile.buffer, "vendor_images");
     }
 
-    
-
-    if (
-      !vendorName ||
-      !contactPerson ||
-      !contactNo ||
-     
-      !address ||
-      !password
-    
-    ) {
+    if (!vendorName || !contactPerson || !contactNo || !address || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
-
-
- 
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -176,11 +139,11 @@ const vendorSignup = async (req, res) => {
       contactNo,
       latitude,
       longitude,
-      landMark:landmark,
+      landMark: landmark,
 
       address,
       password: hashedPassword,
-      image: uploadedImageUrl||"",
+      image: uploadedImageUrl || "",
     });
 
     await newVendor.save();
@@ -192,8 +155,8 @@ const vendorSignup = async (req, res) => {
         contactPerson: newVendor.contactPerson,
         contactNo: newVendor.contactNo,
         latitude: newVendor.latitude,
-        longitude:newVendor.longitude,
-        landmark:newVendor.landMark,
+        longitude: newVendor.longitude,
+        landmark: newVendor.landMark,
         address: newVendor.address,
         image: newVendor.image,
       },
@@ -245,6 +208,5 @@ module.exports = {
   vendorLogin,
   vendorForgotPassword,
   verifyOTP,
-  vendorChangePassword
-
+  vendorChangePassword,
 };
