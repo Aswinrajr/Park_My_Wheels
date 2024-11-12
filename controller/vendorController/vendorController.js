@@ -203,10 +203,58 @@ const vendorLogin = async (req, res) => {
   }
 };
 
+const fetchVendorData = async (req, res) => {
+  try {
+    console.log("Welcome to fetch vendor data");
+
+    const { id } = req.query;
+    const vendorData = await vendorModel.findOne({ _id: id }, { password: 0 });
+
+    if (!vendorData) {
+      return res.status(404).json({ message: "Vendor not found" });
+    }
+
+    
+    return res.status(200).json({
+      message: "Vendor data fetched successfully",
+      data: vendorData
+    });
+  } catch (err) {
+    console.log("Error in fetching the vendor details", err);
+    return res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+const fetchAllVendorData = async (req,res) => {
+  try {
+    const vendorData = await vendorModel.find({}, { password: 0 });
+
+    if (vendorData.length === 0) {
+      return res.status(404).json({ message: "No vendors found" });
+    }
+
+  
+    return res.status(200).json({
+      message: "All vendor data fetched successfully",
+      data: vendorData
+    });
+  } catch (err) {
+    console.log("Error in fetching all vendors", err);
+    return res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+
+
+
+
 module.exports = {
   vendorSignup,
   vendorLogin,
   vendorForgotPassword,
   verifyOTP,
   vendorChangePassword,
+  fetchVendorData,
+  fetchAllVendorData
 };
