@@ -193,8 +193,8 @@ const vendorLogin = async (req, res) => {
       vendorName: vendor.vendorName,
       contactPerson: vendor.contactPerson,
       contactNo: vendor.contactNo,
-      latitude: vendor.location.lat,
-      longitude: vendor.location.lng,
+      latitude: vendor.latitude,
+      longitude: vendor.longitude,
       address: vendor.address,
     });
   } catch (err) {
