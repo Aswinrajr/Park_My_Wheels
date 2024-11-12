@@ -48,6 +48,10 @@ userRoute.get("/get-vehicle-slot", userProfileController.getUserVehicleData);
 userRoute.post("/book-parking-slot", userProfileController.bookParkingSlot);
 
 
+userRoute.get("/get-book-parking-slot", userProfileController.getBookingDetails);
+
+
+
 
 
 

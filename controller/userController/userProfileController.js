@@ -267,6 +267,26 @@ const bookParkingSlot = async (req, res) => {
   }
 };
 
+const getBookingDetails = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const bookingData = await ParkingBooking.find({ userId: id });
+
+    if (bookingData) {
+      res.status(200).json({ success: true, bookingData });
+    } else {
+      res.status(404).json({ success: false, message: "No bookings found for this user",bookingData });
+    }
+  } catch (err) {
+    console.log("Error in get user booking data", err);
+    res.status(500).json({ success: false, message: "Server error, please try again later" });
+  }
+};
+
+
+
+
+
 module.exports = {
   getUserData,
   updateUserData,
@@ -275,5 +295,6 @@ module.exports = {
   getUserDataHome,
   bookParkingSlot,
   getVendorDetails,
+  getBookingDetails
 
 };
