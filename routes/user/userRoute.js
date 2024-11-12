@@ -22,28 +22,34 @@ userRoute.post("/change-password",userController.userChangePassword)
 userRoute.post("/signup", userController.userSignUp);
 userRoute.post("/login", userController.userVerification);
 
+
 // User profile routes
 userRoute.get("/get-userdata", userProfileController.getUserData);
 userRoute.post("/update-userdata", upload.fields([{ name: 'image', maxCount: 1 }]), userProfileController.updateUserData);
 
-// Home data route
+// Home data route for display the user name and images
 userRoute.get("/home", userProfileController.getUserDataHome);
 
-// Vehicle data routes
+// Vehicle data routes to display all the added vehicles
 userRoute.get("/get-vehicle", userProfileController.getUserVehicleData);
 
 // Add vehicle route with file upload
 userRoute.post("/add-vehicle", upload.fields([{ name: 'image' }]), userProfileController.addNewVehicle);
 
-// Get the vendor and user details at the time of choose parking dropdown
-userRoute.get("/get-slot-details",userProfileController.getUserandVendorDetails)
 
 
-//Booking the slot for parking
+// Get the vendor details at the time of choose parking dropdown
+userRoute.get("/get-slot-details-vendor",userProfileController.getVendorDetails)
+
+// Get the user vehicle details at the time of choose parking dropdown
+userRoute.get("/get-vehicle-slot", userProfileController.getUserVehicleData);
+
+//Booking the slot for parking the vehicle
 userRoute.post("/book-parking-slot", userProfileController.bookParkingSlot);
 
-//Get vehicle data in car booking
-userRoute.get("/get-vehicle-slot", userProfileController.getUserVehicleData);
+
+
+
 
 
 

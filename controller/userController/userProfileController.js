@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../../models/userModel");
 const vehicleModel = require("../../models/vehicleModel");
-const ParkingBooking = require("../../models/parkingSchema")
+const ParkingBooking = require("../../models/parkingSchema");
 const { uploadImage } = require("../../config/cloudinary");
 const venderSchema = require("../../models/venderSchema");
 
@@ -101,7 +101,10 @@ const updateUserData = async (req, res) => {
     if (req.files && req.files.image) {
       const imageFile = req.files.image[0];
       // Upload image to the 'user_images' folder
-      const uploadedImageUrl = await uploadImage(imageFile.buffer, "user_images");
+      const uploadedImageUrl = await uploadImage(
+        imageFile.buffer,
+        "user_images"
+      );
       updates.image = uploadedImageUrl;
       console.log("uploadedImageUrl", uploadedImageUrl);
       console.log(" updates.imageUrl", updates.image);
@@ -183,8 +186,7 @@ const addNewVehicle = async (req, res) => {
     const imageFile = req.files.image[0];
 
     // Upload the image to Cloudinary
-    const imageUrl = await uploadImage(imageFile.buffer, "vehicles"); 
-
+    const imageUrl = await uploadImage(imageFile.buffer, "vehicles");
 
     const newVehicle = new vehicleModel({
       image: imageUrl,
@@ -212,42 +214,25 @@ const addNewVehicle = async (req, res) => {
   }
 };
 
-
-
-const getUserandVendorDetails = async (req, res) => {
+const getVendorDetails = async (req, res) => {
   try {
-    console.log("Welcome to get User and Vendor Details");
+    console.log("Welcome to get Vendor Details");
 
-    const { id } = req.query;
-
-    if (!id) {
-      return res.status(400).json({ message: "User ID is required" });
-    }
-
-    // Fetching vehicle data associated with the user ID
-    const vehicleData = await vehicleModel.find({ userId: id });
-    console.log("Vehicle Data:", vehicleData);
-
-   
     const vendorData = await venderSchema.find({}, { password: 0 });
     console.log("Vendor Data:", vendorData);
 
-   
     res.status(200).json({
-      message: "User and vendor details fetched successfully",
-      data: {
-        vehicleData,
-        vendorData,
-      },
+      message: " vendor details fetched successfully",
+      vendorData,
     });
   } catch (err) {
-    console.error("Error in get User and Vendor Details:", err);
-    res.status(500).json({ message: "Server error while fetching details", error: err.message });
+    console.error("Error in get  Vendor Details:", err);
+    res.status(500).json({
+      message: "Server error while fetching details",
+      error: err.message,
+    });
   }
 };
-
-
-
 
 
 
@@ -255,14 +240,11 @@ const bookParkingSlot = async (req, res) => {
   try {
     console.log("Welcome to the booking vehicle");
     const { id } = req.query;
-    const { place, vehicleNumber, bookingDate, time,vendorId } = req.body;
+    const { place, vehicleNumber, bookingDate, time, vendorId } = req.body;
 
     if (!id || !place || !vehicleNumber || !bookingDate || !time) {
-     
       return res.status(400).json({ message: "All fields are required" });
     }
-
-
 
     const newBooking = new ParkingBooking({
       place,
@@ -270,37 +252,20 @@ const bookParkingSlot = async (req, res) => {
       time,
       bookingDate,
       userId: id,
-      vendorId
+      vendorId,
     });
 
     await newBooking.save();
 
-    res
-      .status(201)
-      .json({
-        message: "Parking slot booked successfully",
-        booking: newBooking,
-      });
+    res.status(201).json({
+      message: "Parking slot booked successfully",
+      booking: newBooking,
+    });
   } catch (err) {
     console.error("Error in booking the slot:", err);
     res.status(500).json({ message: "Error in booking the slot" });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = {
   getUserData,
@@ -309,5 +274,6 @@ module.exports = {
   getUserVehicleData,
   getUserDataHome,
   bookParkingSlot,
-  getUserandVendorDetails
+  getVendorDetails,
+
 };
