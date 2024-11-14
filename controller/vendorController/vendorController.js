@@ -121,15 +121,22 @@ const vendorSignup = async (req, res) => {
     }
 
     const imageFile = req.file;
-
     let uploadedImageUrl;
 
     if (imageFile) {
       uploadedImageUrl = await uploadImage(imageFile.buffer, "vendor_images");
     }
 
-    if (!vendorName || !contactPerson || !contactNo || !address || !password||!parkingEntries) {
+    if (!vendorName || !contactPerson || !contactNo || !address || !password || !parkingEntries) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+
+ 
+    let parsedParkingEntries;
+    try {
+      parsedParkingEntries = typeof parkingEntries === 'string' ? JSON.parse(parkingEntries) : parkingEntries;
+    } catch (error) {
+      return res.status(400).json({ message: "Invalid format for parkingEntries" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -141,8 +148,7 @@ const vendorSignup = async (req, res) => {
       latitude,
       longitude,
       landMark: landmark,
-      parkingEntries,
-
+      parkingEntries: parsedParkingEntries,
       address,
       password: hashedPassword,
       image: uploadedImageUrl || "",
@@ -168,6 +174,7 @@ const vendorSignup = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 const vendorLogin = async (req, res) => {
   try {
