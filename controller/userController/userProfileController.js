@@ -235,7 +235,6 @@ const getVendorDetails = async (req, res) => {
 };
 
 
-
 const bookParkingSlot = async (req, res) => {
   try {
     console.log("Welcome to the booking vehicle");
@@ -246,14 +245,21 @@ const bookParkingSlot = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+   
+    const [day, month, year] = bookingDate.split("-");
+    const formattedDate = new Date(`${year}-${month}-${day}`);
+
+    if (isNaN(formattedDate.getTime())) {
+      return res.status(400).json({ message: "Invalid date format for bookingDate" });
+    }
+
     const newBooking = new ParkingBooking({
       place,
       vehicleNumber,
       time,
-      bookingDate,
+      bookingDate: formattedDate, 
       userId: id,
       vendorId,
-     
     });
 
     await newBooking.save();
