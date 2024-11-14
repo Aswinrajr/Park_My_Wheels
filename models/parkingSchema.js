@@ -26,6 +26,13 @@ const parkingBookingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  parkingData:[{
+    type:{
+      type:String
+    },
+    count:String
+
+  }],
   vendorId:{
     type:String
   }

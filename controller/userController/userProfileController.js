@@ -240,9 +240,9 @@ const bookParkingSlot = async (req, res) => {
   try {
     console.log("Welcome to the booking vehicle");
     const { id } = req.query;
-    const { place, vehicleNumber, bookingDate, time, vendorId } = req.body;
+    const { place, vehicleNumber, bookingDate, time, vendorId,parkingData } = req.body;
 
-    if (!id || !place || !vehicleNumber || !bookingDate || !time) {
+    if (!id || !place || !vehicleNumber || !bookingDate || !time||!parkingData) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -253,6 +253,7 @@ const bookParkingSlot = async (req, res) => {
       bookingDate,
       userId: id,
       vendorId,
+      parkingData
     });
 
     await newBooking.save();
