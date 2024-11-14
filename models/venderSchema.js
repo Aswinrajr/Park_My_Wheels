@@ -40,6 +40,15 @@ const vendorSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    parkingEntries:[{
+      type:{
+        type:String
+      },
+      count:{
+        type:String
+      }
+  
+    }],
   },
   { timestamps: true }
 );

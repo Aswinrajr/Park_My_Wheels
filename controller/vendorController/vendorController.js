@@ -110,6 +110,7 @@ const vendorSignup = async (req, res) => {
       address,
       landmark,
       password,
+      parkingEntries
     } = req.body;
 
     const existUser = await vendorModel.findOne({ contactNo });
@@ -127,7 +128,7 @@ const vendorSignup = async (req, res) => {
       uploadedImageUrl = await uploadImage(imageFile.buffer, "vendor_images");
     }
 
-    if (!vendorName || !contactPerson || !contactNo || !address || !password) {
+    if (!vendorName || !contactPerson || !contactNo || !address || !password||!parkingEntries) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -140,6 +141,7 @@ const vendorSignup = async (req, res) => {
       latitude,
       longitude,
       landMark: landmark,
+      parkingEntries,
 
       address,
       password: hashedPassword,
